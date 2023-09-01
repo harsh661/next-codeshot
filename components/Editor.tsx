@@ -1,17 +1,44 @@
 "use client"
 
-import React from "react"
+import React, { useEffect } from "react"
 import { codeSnippets, fonts } from "@/app/constants/options"
 import Editor from "react-simple-code-editor"
 import hljs from "highlight.js"
 import { useGetPreference } from "@/app/contexts/PreferenceContext"
 import { cn } from "@/lib/utils"
-
+import flourite from "flourite"
 
 const CodeEditor = () => {
   const preferences = useGetPreference()
-  const { fontStyle, language, darkMode, title, updatePreferences, code, fontSize } = preferences
+  const {
+    fontStyle,
+    language,
+    darkMode,
+    title,
+    updatePreferences,
+    code,
+    fontSize,
+    autoDetect
+  } = preferences
   const validFont = fontStyle as keyof typeof fonts
+
+  useEffect(() => {
+    const snippet = codeSnippets[Math.floor(Math.random() * codeSnippets.length)]
+
+    updatePreferences({
+      ...preferences,
+      language: snippet.language,
+      code: snippet.code,
+    })
+  }, [])
+
+  useEffect(() => {
+    if(autoDetect) {
+      const {language} = flourite(code, {noUnknown: true})
+
+      updatePreferences({...preferences, language: language.toLowerCase() || 'plaintext'})
+    }
+  }, [autoDetect, code])
 
   return (
     <div
@@ -48,21 +75,32 @@ const CodeEditor = () => {
             type="text"
             value={title}
             spellCheck={false}
-            onChange={(e) => updatePreferences({...preferences, title: e.target.value})}
+            onChange={(e) =>
+              updatePreferences({ ...preferences, title: e.target.value })
+            }
             className="bg-transparent text-center focus:outline-none text-sm font-medium text-zinc-500"
           />
         </div>
       </header>
-      <div className={cn("px-4 pb-4", darkMode ? 'brightness-110' : 'text-zinc-800 brightness-50 saturate-200 contrast-200')}>
+      <div
+        className={cn(
+          "px-4 pb-4",
+          darkMode
+            ? "brightness-110"
+            : "text-zinc-800 brightness-50 saturate-200 contrast-200"
+        )}
+      >
         <Editor
           value={code}
-          onValueChange={(text) => updatePreferences({...preferences, code: text})}
+          onValueChange={(text) =>
+            updatePreferences({ ...preferences, code: text })
+          }
           highlight={(code) =>
-            hljs.highlight(code, { language: language || 'plaintext' }).value
+            hljs.highlight(code, { language: language || "plaintext" }).value
           }
           style={{
             fontFamily: fonts[validFont].name,
-            fontSize: fontSize
+            fontSize: fontSize,
           }}
         />
       </div>
