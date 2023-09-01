@@ -35,7 +35,7 @@ export default function Home() {
         crossOrigin="anonymous"
       />
 
-      <div className={cn("overflow-hidden", showBackground ? themes[validTheme].background : "ring ring-neutral-50")} style={{padding}}>
+      <div className={cn("overflow-hidden", showBackground ? themes[validTheme].background : "transparent")} style={{padding}}>
         <Editor />
       </div>
     </main>
