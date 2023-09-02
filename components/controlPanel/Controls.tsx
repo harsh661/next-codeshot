@@ -7,6 +7,7 @@ import Padding from './Padding'
 import Languages from './Languages'
 import FontFamily from './FontFamily'
 import ExportButton from './ExportButton'
+import Fontsize from './Fontsize'
 
 interface ControlProps {
   bodyRef: MutableRefObject<HTMLElement | null>
@@ -21,6 +22,7 @@ const Controls: React.FC<ControlProps> = ({bodyRef}) => {
         <Padding />
         <Languages />
         <FontFamily />
+        <Fontsize />
         <ExportButton targetRef={bodyRef} />
     </Card>
   )

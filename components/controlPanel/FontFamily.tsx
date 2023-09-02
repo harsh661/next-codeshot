@@ -8,7 +8,7 @@ const FontFamily = () => {
     const { updatePreferences, fontStyle } = preferences
     return (
       <div>
-        <label className="text-xs text-zinc-400">Font</label>
+        <label className="text-xs text-zinc-400">Font style</label>
         <Select value={fontStyle} onValueChange={(value) => updatePreferences({...preferences, fontStyle: value})}>
           <SelectTrigger className="w-32">
             <SelectValue placeholder="Theme" />
