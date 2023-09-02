@@ -5,6 +5,7 @@ import { fonts, themes } from "./constants/options"
 import { useGetPreference } from "./contexts/PreferenceContext"
 import { cn } from "@/lib/utils"
 import Controls from "@/components/controlPanel/Controls"
+import { useRef } from "react"
 
 export default function Home() {
   const {
@@ -12,7 +13,6 @@ export default function Home() {
     fontStyle,
     showBackground,
     padding,
-    darkMode,
   } = useGetPreference()
 
   const validTheme = theme as keyof typeof themes
@@ -23,8 +23,10 @@ export default function Home() {
     return null
   }
 
+  const bodyRef = useRef<HTMLDivElement | null>(null)
+
   return (
-    <main className="dark min-h-screen flex justify-center items-center bg-neutral-950 text-white">
+    <main className="dark h-full flex justify-center items-center bg-neutral-950 text-white">
       <link
         rel="stylesheet"
         href={themes[validTheme].theme}
@@ -36,11 +38,11 @@ export default function Home() {
         crossOrigin="anonymous"
       />
 
-      <div className={cn("overflow-hidden", showBackground ? themes[validTheme].background : "transparent")} style={{padding}}>
+      <div ref={bodyRef} className={cn("overflow-hidden", showBackground ? themes[validTheme].background : "transparent")} style={{padding}}>
         <Editor />
       </div>
 
-      <Controls />
+      <Controls bodyRef={bodyRef}/>
     </main>
   )
 }
