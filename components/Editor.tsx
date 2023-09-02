@@ -43,14 +43,14 @@ const CodeEditor = () => {
   return (
     <div
       className={cn(
-        "rounded-xl border min-w-[400px]",
+        "rounded-xl border",
         darkMode
           ? "bg-black/80 border-zinc-600/50"
           : "bg-white/80 border-zinc-200/50"
       )}
     >
-      <header className="grid grid-cols-6 p-4 items-center gap-5">
-        <div className="flex gap-2">
+      <header className="flex justify-center p-4 items-center gap-5 relative">
+        <div className="flex gap-2 absolute left-4">
           <div
             className={cn(
               "w-3 h-3 rounded-full",

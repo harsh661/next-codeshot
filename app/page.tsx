@@ -6,16 +6,12 @@ import { useGetPreference } from "./contexts/PreferenceContext"
 import { cn } from "@/lib/utils"
 import Controls from "@/components/controlPanel/Controls"
 import { useEffect, useRef } from "react"
+import { Resizable } from "re-resizable"
 
 export default function Home() {
   const preferences = useGetPreference()
-  const {
-    theme,
-    fontStyle,
-    showBackground,
-    padding,
-    updatePreferences,
-  } = preferences
+  const { theme, fontStyle, showBackground, padding, updatePreferences } =
+    preferences
 
   const validTheme = theme as keyof typeof themes
   const validFont = fontStyle as keyof typeof fonts
@@ -37,11 +33,11 @@ export default function Home() {
       code: state.code ? atob(state.code) : "",
       autoDetect: state.autoDetect === "true",
       darkMode: state.darkMode === "true",
-      fontSize: Number(state.fontSize || 16),
+      fontSize: Number(state.fontSize || 18),
       padding: Number(state.padding || 64),
-      showBackground: state.showBackground === "true"
+      showBackground: state.showBackground === "true",
     }
-    updatePreferences({...preferences, ...statePreferences})
+    updatePreferences({ ...preferences, ...statePreferences })
   }, [])
 
   return (
@@ -57,17 +53,19 @@ export default function Home() {
         crossOrigin="anonymous"
       />
 
-      <div
-        ref={bodyRef}
-        className={cn(
-          "overflow-hidden",
-          showBackground ? themes[validTheme].background : "transparent"
-        )}
-        style={{ padding }}
-      >
-        <Editor />
-      </div>
-
+      <Resizable enable={{left: true, right: true}} minWidth={200}>
+        <div
+          ref={bodyRef}
+          className={cn(
+            "overflow-hidden",
+            showBackground ? themes[validTheme].background : "transparent"
+          )}
+          style={{ padding }}
+        >
+          <Editor />
+        </div>
+      </Resizable>
+ 
       <Controls bodyRef={bodyRef} />
     </main>
   )
