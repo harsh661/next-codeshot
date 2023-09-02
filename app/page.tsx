@@ -4,6 +4,7 @@ import Editor from "@/components/Editor"
 import { fonts, themes } from "./constants/options"
 import { useGetPreference } from "./contexts/PreferenceContext"
 import { cn } from "@/lib/utils"
+import Controls from "@/components/controlPanel/Controls"
 
 export default function Home() {
   const {
@@ -38,6 +39,8 @@ export default function Home() {
       <div className={cn("overflow-hidden", showBackground ? themes[validTheme].background : "transparent")} style={{padding}}>
         <Editor />
       </div>
+
+      <Controls />
     </main>
   )
 }
