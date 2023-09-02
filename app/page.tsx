@@ -5,15 +5,17 @@ import { fonts, themes } from "./constants/options"
 import { useGetPreference } from "./contexts/PreferenceContext"
 import { cn } from "@/lib/utils"
 import Controls from "@/components/controlPanel/Controls"
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 
 export default function Home() {
+  const preferences = useGetPreference()
   const {
     theme,
     fontStyle,
     showBackground,
     padding,
-  } = useGetPreference()
+    updatePreferences,
+  } = preferences
 
   const validTheme = theme as keyof typeof themes
   const validFont = fontStyle as keyof typeof fonts
@@ -24,6 +26,23 @@ export default function Home() {
   }
 
   const bodyRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search)
+    if (queryParams.size === 0) return
+    const state = Object.fromEntries(queryParams)
+
+    const statePreferences = {
+      ...state,
+      code: state.code ? atob(state.code) : "",
+      autoDetect: state.autoDetect === "true",
+      darkMode: state.darkMode === "true",
+      fontSize: Number(state.fontSize || 16),
+      padding: Number(state.padding || 64),
+      showBackground: state.showBackground === "true"
+    }
+    updatePreferences({...preferences, ...statePreferences})
+  }, [])
 
   return (
     <main className="dark h-full flex justify-center items-center bg-neutral-950 text-white">
@@ -38,11 +57,18 @@ export default function Home() {
         crossOrigin="anonymous"
       />
 
-      <div ref={bodyRef} className={cn("overflow-hidden", showBackground ? themes[validTheme].background : "transparent")} style={{padding}}>
+      <div
+        ref={bodyRef}
+        className={cn(
+          "overflow-hidden",
+          showBackground ? themes[validTheme].background : "transparent"
+        )}
+        style={{ padding }}
+      >
         <Editor />
       </div>
 
-      <Controls bodyRef={bodyRef}/>
+      <Controls bodyRef={bodyRef} />
     </main>
   )
 }
