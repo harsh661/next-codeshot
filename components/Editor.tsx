@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { codeSnippets, fonts } from "@/app/constants/options"
 import Editor from "react-simple-code-editor"
 import hljs from "highlight.js"
@@ -10,6 +10,8 @@ import flourite from "flourite"
 
 const CodeEditor = () => {
   const preferences = useGetPreference()
+  const [runEffect, setRunEffect] = useState<boolean>(true)
+
   const {
     fontStyle,
     language,
@@ -18,25 +20,33 @@ const CodeEditor = () => {
     updatePreferences,
     code,
     fontSize,
-    autoDetect
+    autoDetect,
   } = preferences
   const validFont = fontStyle as keyof typeof fonts
 
   useEffect(() => {
-    const snippet = codeSnippets[Math.floor(Math.random() * codeSnippets.length)]
+    if (runEffect) {
+      const snippet =
+        codeSnippets[Math.floor(Math.random() * codeSnippets.length)]
 
-    updatePreferences({
-      ...preferences,
-      language: snippet.language,
-      code: snippet.code,
-    })
-  }, [])
+      updatePreferences({
+        ...preferences,
+        language: snippet.language,
+        code: snippet.code,
+      })
+
+      setRunEffect(false)
+    }
+  }, [runEffect])
 
   useEffect(() => {
-    if(autoDetect) {
-      const {language} = flourite(code, {noUnknown: true})
+    if (autoDetect) {
+      const { language } = flourite(code, { noUnknown: true })
 
-      updatePreferences({...preferences, language: language.toLowerCase() || 'plaintext'})
+      updatePreferences({
+        ...preferences,
+        language: language.toLowerCase() || "plaintext",
+      })
     }
   }, [autoDetect, code])
 
