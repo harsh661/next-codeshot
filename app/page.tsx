@@ -16,14 +16,6 @@ export default function Home() {
   const { theme, fontStyle, showBackground, padding, updatePreferences } =
     preferences
 
-  const validTheme = theme as keyof typeof themes
-  const validFont = fontStyle as keyof typeof fonts
-
-  if (!(validTheme in themes)) {
-    console.log("Invalid theme")
-    return null
-  }
-
   useEffect(() => {
     if (runEffect) {
       const queryParams = new URLSearchParams(location.search)
@@ -44,6 +36,14 @@ export default function Home() {
       setRunEffect(false)
     }
   }, [runEffect])
+
+  const validTheme = theme as keyof typeof themes
+  const validFont = fontStyle as keyof typeof fonts
+
+  if (!(validTheme in themes)) {
+    console.log("Invalid theme")
+    return null
+  }
 
   return (
     <main className="dark h-full flex justify-center items-center bg-neutral-950 text-white">
