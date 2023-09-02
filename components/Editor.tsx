@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { codeSnippets, fonts } from "@/app/constants/options"
 import Editor from "react-simple-code-editor"
 import hljs from "highlight.js"
@@ -10,7 +10,6 @@ import flourite from "flourite"
 
 const CodeEditor = () => {
   const preferences = useGetPreference()
-  const [runEffect, setRunEffect] = useState<boolean>(true)
 
   const {
     fontStyle,
@@ -22,22 +21,18 @@ const CodeEditor = () => {
     fontSize,
     autoDetect,
   } = preferences
-  const validFont = fontStyle as keyof typeof fonts
 
   useEffect(() => {
-    if (runEffect) {
-      const snippet =
-        codeSnippets[Math.floor(Math.random() * codeSnippets.length)]
+    const snippet =
+      codeSnippets[Math.floor(Math.random() * codeSnippets.length)]
 
-      updatePreferences({
-        ...preferences,
-        language: snippet.language,
-        code: snippet.code,
-      })
-
-      setRunEffect(false)
-    }
-  }, [runEffect])
+    updatePreferences({
+      ...preferences,
+      language: snippet.language,
+      code: snippet.code,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (autoDetect) {
@@ -49,6 +44,8 @@ const CodeEditor = () => {
       })
     }
   }, [autoDetect, code])
+
+  const validFont = fontStyle as keyof typeof fonts
 
   return (
     <div
