@@ -47,6 +47,15 @@ const CodeEditor = () => {
 
   const validFont = fontStyle as keyof typeof fonts
 
+  const handleEditorClick = () => {
+    const editor = document.querySelector(
+      ".code-editor textarea"
+    ) as HTMLTextAreaElement
+    if (editor) {
+      editor.select()
+    }
+  }
+
   return (
     <div
       className={cn(
@@ -82,6 +91,9 @@ const CodeEditor = () => {
             type="text"
             value={title}
             spellCheck={false}
+            onClick={(e: React.MouseEvent<HTMLInputElement>) =>
+              e.currentTarget.select()
+            }
             onChange={(e) =>
               updatePreferences({ ...preferences, title: e.target.value })
             }
@@ -109,6 +121,8 @@ const CodeEditor = () => {
             fontFamily: fonts[validFont].name,
             fontSize: fontSize,
           }}
+          className="code-editor"
+          onClick={handleEditorClick}
         />
       </div>
     </div>
